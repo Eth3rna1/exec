@@ -2,7 +2,8 @@
 Functions that cover every possible case when dealing with the command
 """
 import subprocess
-from .__init__ import TOKEN
+
+TOKEN = "{.}"
 
 def exec_only_exec_in_cl(cmd: list[str]):
     """

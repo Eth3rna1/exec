@@ -1,6 +1,6 @@
 import os
 import sys
-from options import Options
+from .options import Options
 
 
 def parse(query: str) -> list[str]:
