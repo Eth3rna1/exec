@@ -31,14 +31,19 @@ def parse(query: str) -> list[str]:
     return cmd
 
 
-def entries_drop_box() -> str | None:
+def entries_drop_box(directory: str) -> str | None:
     """
     A UI for the user to pick an entry from the current working directory
     """
-    entries = os.listdir(os.getcwd())
+    entries = os.listdir(directory)
     if len(entries) == 0:
         return
     o = Options(entries)
     print(o.display())
-    selection = input("\nSelection: ")
+    selection = input("\nEntry: ")
     return o.evaluate(selection)
+
+def swap_token(args: str, entry: str, token: str):
+    for i in range(len(args)):
+        if args[i] == token:
+            args[i] = entry
