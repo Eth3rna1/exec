@@ -45,5 +45,5 @@ def entries_drop_box(directory: str) -> str | None:
 
 def swap_token(args: str, entry: str, token: str):
     for i in range(len(args)):
-        if args[i] == token:
-            args[i] = entry
+        if token in args[i]:
+            args[i] = args[i].replace(token, entry)
