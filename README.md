@@ -23,7 +23,10 @@ pyinstaller exec.spec
 * Binary will be located in `./dist/exec.exe`
 
 ## Functionality
-* `exec` is flexible with different scenarios, one being with the sole call of exec.
+`exec` is flexible with multiple scenarios, them being:
+
+---
+### 1. A sole call of `exec`.
 ```console
 exec
  ```
@@ -35,11 +38,55 @@ Subsequently, a UI will appear waiting for user selection of the entry they want
 3.) c
 4.) file_with_a_long_name.txt
 
+Select an entry by its index or value.
 Entry: 4
 ```
 
 Then a command line will be introduced, letting the user inject their command and use a placeholder token to indicate the entry selected
 
 ```text
+Place `{.}` as a placeholder to replace with the entry
 Command>> move {.} ..
 ```
+
+---
+### 2. Calling `exec` along with its placeholder
+```console
+exec nvim {.}
+```
+The UI drop box then appears, waiting for user selection on entry
+
+```text
+1.) a
+2.) b
+3.) c
+4.) file_with_a_long_name.txt
+
+Select an entry by its index or value.
+Entry: 4
+```
+There is **NO** prompt for command in this scenario since its already implied in the CL where the user already used a placeholder
+
+---
+### 3. Injecting the command without placeholder
+```console
+exec seek -r -l -u
+```
+Although a placeholder isn't explicitly used, the program is always going to assume that there should be an entry in the command. A UI drop box will appear, waiting for user selection, and will append the entry to the end of the command.
+
+```text
+1.) a
+2.) b
+3.) c
+4.) file_with_a_long_name.txt
+
+Select an entry by its index or value.
+Entry: 4
+```
+**NO** command prompt follows in this instance since its already defined
+### 4. Scenario: No entries in the current working directory
+In this scenario, `exec` cannot work with any entry because they're non-existant, in this case, a new prompt will appear; a prompt that asks to specify a directory to work with.
+```text
+Dir:
+```
+Then depending, on what followed when the user called `exec`, it will run any previous defined scenarios.
