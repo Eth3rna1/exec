@@ -1,5 +1,6 @@
 import os
 import sys
+
 try:
     from src.options import Options
 except ImportError:
@@ -25,8 +26,8 @@ def parse(query: str) -> list[str]:
                 else:
                     cmd.append("".join(buffer))
                     buffer.clear()
-            case "\"":
-                quoted = not quoted # flipping the boolean
+            case '"':
+                quoted = not quoted  # flipping the boolean
             case _:
                 buffer.append(c)
     if len(buffer) != 0:
@@ -43,8 +44,10 @@ def entries_drop_box(directory: str) -> str | None:
         return
     o = Options(entries)
     print(o.display())
-    selection = input("\nEntry: ")
+    print("\nSelect an entry by its index or value.")
+    selection = input("Entry: ")
     return o.evaluate(selection)
+
 
 def swap_token(args: str, entry: str, token: str):
     for i in range(len(args)):

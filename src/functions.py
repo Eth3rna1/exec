@@ -1,8 +1,10 @@
 """
 Functions that cover every possible case when dealing with the command
 """
+
 import sys
 import subprocess
+
 try:
     from src.utils import parse
     from src.utils import swap_token
@@ -21,9 +23,11 @@ def exec_only_exec_in_cl(directory: str, token: str) -> int:
     selection = entries_drop_box(directory)
     if selection is None:
         return 1
+    print("\nPlace `{.}` as a placeholder to replace with the entry")
     command = parse(input("Command>> "))
     swap_token(command, selection, token)
     return subprocess.run(command).returncode
+
 
 def exec_token_in_cl(directory: str, token: str, args: list[str]) -> int:
     """
@@ -40,6 +44,7 @@ def exec_token_in_cl(directory: str, token: str, args: list[str]) -> int:
     command.extend(args)
     swap_token(command, selection, token)
     return subprocess.run(command).returncode
+
 
 def exec_append_entry_to_args(directory: str, token: str, args: list[str]) -> int:
     if sys.platform == "win32":
@@ -64,7 +69,9 @@ def exec_no_entries_in_cwd(args: list[str], token: str) -> int:
     directory = input("Dir: ")
     assert os.path.exists(directory), f"`{directory}` does not exist"
     assert os.path.isdir(directory), f"`{directory}` must be a directory"
-    assert len(os.listdir(directory)), f"`{directory}` is empty, please select a directory with entries"
+    assert len(
+        os.listdir(directory)
+    ), f"`{directory}` is empty, please select a directory with entries"
     if len(args) == 1:
         return exec_only_exec_in_cl(directory, token)
     if any(i == token for i in args):

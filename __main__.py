@@ -1,5 +1,6 @@
 import os
 import sys
+
 try:
     from src.__init__ import exec_token_in_cl
     from src.__init__ import exec_only_exec_in_cl
@@ -14,6 +15,7 @@ except ImportError:
 DIR = os.getcwd()
 TOKEN = "{.}"
 
+
 def main():
     global DIR, TOKEN
     if len(os.listdir(DIR)) == 0:
@@ -26,6 +28,7 @@ def main():
     else:
         # User provided extra arguments
         return exec_append_entry_to_args(DIR, TOKEN, sys.argv[1:])
+
 
 if __name__ == "__main__":
     main()
