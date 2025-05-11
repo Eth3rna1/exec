@@ -1,6 +1,9 @@
 import os
 import sys
-from .options import Options
+try:
+    from src.options import Options
+except ImportError:
+    from .options import Options
 
 
 def parse(query: str) -> list[str]:

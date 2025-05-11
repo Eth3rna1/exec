@@ -3,9 +3,14 @@ Functions that cover every possible case when dealing with the command
 """
 import sys
 import subprocess
-from .utils import parse
-from .utils import swap_token
-from .utils import entries_drop_box
+try:
+    from src.utils import parse
+    from src.utils import swap_token
+    from src.utils import entries_drop_box
+except ImportError:
+    from .utils import parse
+    from .utils import swap_token
+    from .utils import entries_drop_box
 
 
 def exec_only_exec_in_cl(directory: str, token: str) -> int:
