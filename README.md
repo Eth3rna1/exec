@@ -6,6 +6,15 @@
 **FYI, the token is: `{.}`**
 
 > Before continuing with the installation, make sure you have the `PyInstaller` builder tool to compile the python spec file
+>
+> If you don't have it, run pip.
+> ```console
+> pip install PyInstaller
+> ``` 
+> Or
+> ```console
+> python.exe -m pip install PyInstaller
+> ```
 
 ## Getting Started
 * Clone the repo
