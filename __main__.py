@@ -24,10 +24,19 @@ def main():
         # No args were provided
         return exec_only_exec_in_cl(DIR, TOKEN)
     if any(i == TOKEN for i in sys.argv):
-        return exec_token_in_cl(DIR, TOKEN, sys.argv[1:])
+        return exec_token_in_cl(DIR, TOKEN, sys.argv)
     # User provided extra arguments
-    return exec_append_entry_to_args(DIR, TOKEN, sys.argv[1:])
+    return exec_append_entry_to_args(DIR, TOKEN, sys.argv)
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+        sys.exit(0)
+    except AssertionError as a:
+        print("AssertionError: ", a)
+    except PermissionError as p:
+        print("PermissionError: ", p)
+    except Exception as e:
+        print("Error: ", e)
+    sys.exit(1)

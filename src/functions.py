@@ -44,7 +44,7 @@ def exec_token_in_cl(directory: str, token: str, args: list[str]) -> int:
     else:
         command = []
     selection = os.path.join(directory, selection)
-    command.extend(args)
+    command.extend(args[1:]) # skipping the first exec argument
     swap_token(command, selection, token)
     return subprocess.run(command).returncode
 
@@ -54,7 +54,7 @@ def exec_append_entry_to_args(directory: str, token: str, args: list[str]) -> in
         command = ["cmd", "/C"]
     else:
         command = []
-    command.extend(args)
+    command.extend(args[1:]) # skipping the first exec argument
     selection = entries_drop_box(directory)
     if selection is None:
         return 1
@@ -80,5 +80,4 @@ def exec_no_entries_in_cwd(args: list[str], token: str) -> int:
         return exec_only_exec_in_cl(directory, token)
     if any(i == token for i in args):
         return exec_token_in_cl(directory, token, args)
-    else:
-        return exec_append_entry_to_args(directory, token, args[1:])
+    return exec_append_entry_to_args(directory, token, args)
