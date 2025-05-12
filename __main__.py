@@ -19,7 +19,7 @@ TOKEN = "{.}"
 def main():
     global DIR, TOKEN
     if len(os.listdir(DIR)) == 0:
-        return exec_no_entries_in_cwd(sys.argv)
+        return exec_no_entries_in_cwd(sys.argv, TOKEN)
     if len(sys.argv) == 1:
         # No args were provided
         return exec_only_exec_in_cl(DIR, TOKEN)

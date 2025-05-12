@@ -2,6 +2,7 @@
 Functions that cover every possible case when dealing with the command
 """
 
+import os
 import sys
 import subprocess
 
@@ -23,6 +24,7 @@ def exec_only_exec_in_cl(directory: str, token: str) -> int:
     selection = entries_drop_box(directory)
     if selection is None:
         return 1
+    selection = os.path.join(directory, selection)
     print("\nPlace `{.}` as a placeholder to replace with the entry")
     command = parse(input("Command>> "))
     swap_token(command, selection, token)
@@ -41,6 +43,7 @@ def exec_token_in_cl(directory: str, token: str, args: list[str]) -> int:
         command = ["cmd", "/C"]
     else:
         command = []
+    selection = os.path.join(directory, selection)
     command.extend(args)
     swap_token(command, selection, token)
     return subprocess.run(command).returncode
@@ -55,6 +58,7 @@ def exec_append_entry_to_args(directory: str, token: str, args: list[str]) -> in
     selection = entries_drop_box(directory)
     if selection is None:
         return 1
+    selection = os.path.join(directory, selection)
     command.append(selection)
     return subprocess.run(command).returncode
 
