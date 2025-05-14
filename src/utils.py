@@ -45,8 +45,13 @@ def entries_drop_box(directory: str) -> str | None:
     o = Options(entries)
     print(o.display())
     print("\nSelect an entry by its index or value.")
-    selection = input("Entry: ")
-    return o.evaluate(selection)
+    while True:
+        selection = input("Entry: ")
+        result = o.evaluate(selection)
+        if result is None and len(selection) == 0:
+            return None
+        if result is not None:
+            return result
 
 
 def swap_token(args: str, entry: str, token: str):
