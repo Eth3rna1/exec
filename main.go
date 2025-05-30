@@ -8,7 +8,9 @@ import (
 	 "exec/functions"
 )
 
+// The token needed to exchange with an entry
 const TOKEN string = "{.}"
+// The default directory to start executing
 var DIR string = func() string {
 	res, err := os.Getwd()
 	if err != nil {

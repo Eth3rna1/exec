@@ -10,7 +10,12 @@ import (
 	"exec/options"
 )
 
+// Executes a command
 func Execute(command []string) {
+	if len(command) == 0 {
+		// avoiding unecessary execution
+		return
+	}
 	var args []string
 	if runtime.GOOS == "windows" {
 		args = append(args, "cmd", "/C")
@@ -26,6 +31,7 @@ func Execute(command []string) {
 	}
 }
 
+// Outputs a prompt before taking user input
 func Input(prompt string) string {
 	fmt.Print(prompt)
 	reader := bufio.NewReader(os.Stdin)
@@ -37,6 +43,9 @@ func Input(prompt string) string {
 	return strings.TrimSpace(response)
 }
 
+// After receiving user input regarding the command,
+// this function parses such string like a CL, splitting
+// it into parts
 func ParseQuery(query string) []string {
 	var fragments []string
 	var buffer string
@@ -71,11 +80,16 @@ func ParseQuery(query string) []string {
 	return fragments
 }
 
+// Displays a UI where the user selects a file entry
 func EntriesDropBox(dir string) *string {
 	var entries []string
 	{
 		// populating the entries var with entry names
-		ent, _ := os.ReadDir(dir) // assuming that dir exists
+		ent, err := os.ReadDir(dir)
+		if err != nil {
+			fmt.Println(err)
+			return nil
+		}
 		if len(ent) == 0 {
 			return nil
 		}
@@ -90,12 +104,15 @@ func EntriesDropBox(dir string) *string {
 	return o.Evaluate(choice)
 }
 
+// When the user inputs a command, this function will replace the TOKEN
+// with the desired entry
 func SwapToken(args *[]string, entry string, token string) {
 	for i := 0; i < len(*args); i++ {
 		(*args)[i] = strings.Replace((*args)[i], token, entry, -1)
 	}
 }
 
+// An abstraction that returns the length of a directory
 func DirLen(dir string) int {
 	stat, err := os.Stat(dir)
 	if err != nil {

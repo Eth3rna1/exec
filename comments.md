@@ -4,7 +4,5 @@
 
 * Implemented the main function
 
+* Documented code where necessary
 
-# To-Do
-
-* Doc code where necessary

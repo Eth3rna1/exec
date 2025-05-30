@@ -19,7 +19,6 @@ func Exec_TokenInCl(dir string, token string, args []string) {
 	relPathSelection := filepath.Join(dir, *selection)
 	cmd = append(cmd, args[1:]...)
 	utils.SwapToken(&cmd, relPathSelection, token)
-	fmt.Println(cmd) // logging
 	utils.Execute(cmd)
 }
 
@@ -34,7 +33,6 @@ func Exec_OnlyExecInCl(dir string, token string) {
 	fmt.Printf("\nPlace `%s` as a placeholder to replace with the entry\n", token)
 	cmd := utils.ParseQuery(utils.Input("Command>> "))
 	utils.SwapToken(&cmd, relPathSelection, token)
-	fmt.Println(cmd) // logging
 	utils.Execute(cmd)
 }
 
@@ -92,6 +90,5 @@ func Exec_AppendEntryToArgs(dir string, token string, args []string) {
 	}
 	relPathSelection := filepath.Join(dir, *selection)
 	command = append(command, relPathSelection)
-	fmt.Println(command) // logging
 	utils.Execute(command)
 }
