@@ -5,7 +5,7 @@
 
 **FYI, the token is: `{.}`**
 
-> Before continuing, make sure have `go` binary tool installed
+> Before continuing, make sure have [`go`](https://go.dev/dl/) binary tool installed
 
 ## Getting Started
 * Clone the repo
