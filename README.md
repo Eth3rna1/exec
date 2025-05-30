@@ -1,36 +1,27 @@
-## Exec Python CLI Tool
+## Exec Golang CLI Tool
 
 ## About
 `exec` is a CLI tool that is made to improve the CL experience by offering a placeholder that in turn, the user can use to inject an entry name, dealing with the tedious task of copying and pasting long file paths manually.
 
 **FYI, the token is: `{.}`**
 
-> Before continuing with the installation, make sure you have the `PyInstaller` builder tool to compile the python spec file
->
-> If you don't have it, run pip.
-> ```console
-> pip install PyInstaller
-> ``` 
-> Or
-> ```console
-> python.exe -m pip install PyInstaller
-> ```
+> Before continuing, make sure have `go` binary tool installed
 
 ## Getting Started
 * Clone the repo
 ```console
 git clone https://github.com/Eth3rna1/exec.git
 ```
-* Enter the project
+
+* cd into the project
 ```console
 cd exec
 ```
-* Locate the `exec.spec` file and compile it
-```console
-pyinstaller exec.spec
-```
-* Binary will be located in `./dist/exec.exe`
 
+* Build the binary
+```console
+go build
+```
 ## Functionality
 `exec` is flexible with multiple scenarios, them being:
 
