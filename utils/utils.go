@@ -4,9 +4,27 @@ import (
 	"os"
 	"fmt"
 	"bufio"
+	"runtime"
 	"strings"
+	"os/exec"
 	"exec/options"
 )
+
+func Execute(command []string) {
+	var args []string
+	if runtime.GOOS == "windows" {
+		args = append(args, "cmd", "/C")
+	}
+	args = append(args, command...)
+	cmd := exec.Command(args[0], args[1:]...)
+	cmd.Stdout = os.Stdout
+	cmd.Stdin = os.Stdin
+	cmd.Stderr = os.Stderr
+	if err := cmd.Run(); err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
 
 func Input(prompt string) string {
 	fmt.Print(prompt)
@@ -58,14 +76,17 @@ func EntriesDropBox(dir string) *string {
 	{
 		// populating the entries var with entry names
 		ent, _ := os.ReadDir(dir) // assuming that dir exists
+		if len(ent) == 0 {
+			return nil
+		}
 		for _, e := range ent {
 			entries = append(entries, e.Name())
 		}
 	}
-	// assuming that the directory is not empty
 	o, _ := options.NewOptions(entries)
 	fmt.Println(o.Display())
-	choice := Input("\nChoice: ")
+	fmt.Println("\nSelect an entry by its index or value.")
+	choice := Input("\nEntry: ")
 	return o.Evaluate(choice)
 }
 
@@ -73,4 +94,16 @@ func SwapToken(args *[]string, entry string, token string) {
 	for i := 0; i < len(*args); i++ {
 		(*args)[i] = strings.Replace((*args)[i], token, entry, -1)
 	}
+}
+
+func DirLen(dir string) int {
+	stat, err := os.Stat(dir)
+	if err != nil {
+		return 0
+	}
+	if !stat.IsDir() {
+		return 0
+	}
+	entries, _ := os.ReadDir(dir)
+	return len(entries)
 }

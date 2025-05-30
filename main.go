@@ -1,25 +1,44 @@
 package main
 
 import (
+	"os"
 	"fmt"
-	_ "exec/utils"
-	_ "exec/options"
-	_ "exec/functions"
+	"strings"
+	 "exec/utils"
+	 "exec/functions"
 )
 
-func PrintArray(arr []string) {
-	var buffer string
-	buffer += "["
-	for i, a := range arr {
-		buffer += "\""
-		buffer += a
-		buffer += "\""
-		if i != len(arr) - 1 {
-			buffer += ", "
-		}
+const TOKEN string = "{.}"
+var DIR string = func() string {
+	res, err := os.Getwd()
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
 	}
-	buffer += "]"
-	fmt.Println(buffer)
-}
+	return res
+}()
 
-func main() {}
+func main() {
+	if utils.DirLen(DIR) == 0 {
+		functions.Exec_NoEntriesInCwd(os.Args, TOKEN)
+		return
+	}
+	if len(os.Args) == 1 {
+		functions.Exec_OnlyExecInCl(DIR, TOKEN)
+		return
+	}
+	// anonymous any function
+	if func(args *[]string) bool {
+		for _, el := range *args {
+			if strings.Contains(el, TOKEN) {
+				return true
+			}
+		}
+		return false
+	}(&os.Args) {
+		functions.Exec_TokenInCl(DIR, TOKEN, os.Args)
+		return
+	}
+	functions.Exec_AppendEntryToArgs(DIR, TOKEN, os.Args)
+	return
+}

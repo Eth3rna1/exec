@@ -1,78 +1,97 @@
 package functions
 
 import (
-	_ "exec/utils"
+	"os"
+	"fmt"
+	"strings"
+	"exec/utils"
+	"path/filepath"
 )
 
 // When the token is already predefined in the command line
 //     Example: exec example_command.exe {TOKEN} {TOKEN}
-func exec_token_in_cl(dir string, token string, args []string) {
-//     selection = entries_drop_box(directory)
-//     if selection is None:
-//         return 1
-//     if sys.platform == "win32":
-//         command = ["cmd", "/C"]
-//     else:
-//         command = []
-//     selection = os.path.join(directory, selection)
-//     command.extend(args[1:]) # skipping the first exec argument
-//     swap_token(command, selection, token)
-//     return subprocess.run(command).returncode
-	panic("Not implemented yet")
+func Exec_TokenInCl(dir string, token string, args []string) {
+	selection := utils.EntriesDropBox(dir);
+	if selection == nil {
+		return
+	}
+	var cmd []string
+	relPathSelection := filepath.Join(dir, *selection)
+	cmd = append(cmd, args[1:]...)
+	utils.SwapToken(&cmd, relPathSelection, token)
+	fmt.Println(cmd) // logging
+	utils.Execute(cmd)
 }
 
 // When only `exec` is called in the command line
 //     Example: exec
-func exec_only_exec_in_cl(dir string, token string) int {
-    // selection = entries_drop_box(directory)
-    // if selection is None:
-    //     return 1
-    // selection = os.path.join(directory, selection)
-    // print("\nPlace `{.}` as a placeholder to replace with the entry")
-    // command = parse(input("Command>> "))
-    // swap_token(command, selection, token)
-    // return subprocess.run(command).returncode
-	panic("Not implemented yet")
+func Exec_OnlyExecInCl(dir string, token string) {
+	selection := utils.EntriesDropBox(dir)
+	if selection == nil {
+		return
+	}
+	relPathSelection := filepath.Join(dir, *selection)
+	fmt.Printf("\nPlace `%s` as a placeholder to replace with the entry\n", token)
+	cmd := utils.ParseQuery(utils.Input("Command>> "))
+	utils.SwapToken(&cmd, relPathSelection, token)
+	fmt.Println(cmd) // logging
+	utils.Execute(cmd)
 }
 
 // Regardless of the cl, there are no entries in the
 // current working directory to work with
 //
 // Asks for directory to work with
-func exec_no_entries_in_cwd(args []string, token string) {
-//     directory = input("Dir: ")
-//     assert os.path.exists(directory), f"`{directory}` does not exist"
-//     assert os.path.isdir(directory), f"`{directory}` must be a directory"
-//     assert len(
-//         os.listdir(directory)
-//     ), f"`{directory}` is empty, please select a directory with entries"
-//     if len(args) == 1:
-//         return exec_only_exec_in_cl(directory, token)
-//     if any(i == token for i in args):
-//         return exec_token_in_cl(directory, token, args)
-//     return exec_append_entry_to_args(directory, token, args)
-	panic("Not implemented yet")
+func Exec_NoEntriesInCwd(args []string, token string) {
+	dir := utils.Input("Dir: ")
+	stat, err := os.Stat(dir)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if !stat.IsDir() {
+		fmt.Printf("`%s` is not a directory.", dir)
+		return
+	}
+	if entries, _ := os.ReadDir(dir); len(entries) == 0 {
+		fmt.Printf("`%s` is empty, please select a directory with entries.", dir)
+		return
+	}
+	if len(args) == 1 {
+		Exec_OnlyExecInCl(dir, token)
+		return
+	}
+	// my implementation of an `any()` function
+	if func(arr *[]string) bool {
+		for _, el := range *arr {
+			if strings.Contains(el, token) {
+				return true
+			}
+		}
+		return false
+	}(&args) {
+		Exec_TokenInCl(dir, token, args)
+		return
+	}
+	Exec_AppendEntryToArgs(dir, token, args) // else this
 }
 
 // When a command given along with calling `exec`, although the token isn't present,
 // the program will always assume a token is present, thus, it will open a UI and have
 // the client to select and append such entry to the command
 //
-// Example: exec seek -e -r --use-cache /* Here */     <----
+// Example: exec seek -e -r --use-cache /* Here */     <---
 //															 \
 //															  |
 // The program will have the user select an entry to append  /
-func exec_append_entry_to_args(dir string, token string, args []string) {
-//     if sys.platform == "win32":
-//         command = ["cmd", "/C"]
-//     else:
-//         command = []
-//     command.extend(args[1:]) # skipping the first exec argument
-//     selection = entries_drop_box(directory)
-//     if selection is None:
-//         return 1
-//     selection = os.path.join(directory, selection)
-//     command.append(selection)
-//     return subprocess.run(command).returncode
-	panic("Not implemented yet")
+func Exec_AppendEntryToArgs(dir string, token string, args []string) {
+	var command []string
+	selection := utils.EntriesDropBox(dir)
+	if selection == nil {
+		return
+	}
+	relPathSelection := filepath.Join(dir, *selection)
+	command = append(command, relPathSelection)
+	fmt.Println(command) // logging
+	utils.Execute(command)
 }
