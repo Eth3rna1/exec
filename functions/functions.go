@@ -83,7 +83,7 @@ func Exec_NoEntriesInCwd(args []string, token string) {
 //															  |
 // The program will have the user select an entry to append  /
 func Exec_AppendEntryToArgs(dir string, token string, args []string) {
-	var command []string
+	var command []string = args[1:]
 	selection := utils.EntriesDropBox(dir)
 	if selection == nil {
 		return
